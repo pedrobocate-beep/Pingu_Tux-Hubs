@@ -1,467 +1,793 @@
-
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>LuaU Obfuscator - WeAreDevs</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<meta name="keywords" content="wearedevs, obfuscator, lua obfuscator, obfuscation" />
-        <meta name="description" content="Protect your Lua script with obfuscation, making it harder to read and reverse-engineer." />
-		<!-- Open Graph Metadata -->
-		<meta property="og:image" content="https://wearedevs.net/images/logo.png">
-		<meta property="og:image:width" content="150">
-		<meta property="og:image:height" content="150">
-		<meta property="og:title" content="LuaU Obfuscator - WeAreDevs">
-		<meta property="og:description" content="Protect your Lua script with obfuscation, making it harder to read and reverse-engineer.">
-		<meta property="og:url" content="https://wearedevs.net/obfuscator">
-		<meta property="og:type" content="website">
-		
-		<link rel="shortcut icon" href="/favicon.ico" />
-<link href="/css/main.css?v=27&v2=12" rel="stylesheet" type="text/css">
-<link href="/css/themes/night.css?v=27&v2=4" rel="stylesheet" type="text/css">
-<link href="/css/navheader.css?v=27&v2=7" rel="stylesheet" type="text/css">
-<link href="/css/roles.css?v=27&v2=3" rel="stylesheet" type="text/css">
-<link rel="manifest" href="/manifest.json?v2=2" />
-
-<script type="text/javascript" src="/js/timestamp.js?v=27&v2=4"></script>
-<script type="text/javascript" src="/js/utils.js?v=27&v2=3"></script>
-<script type="text/javascript" src="/js/oembed.js?v=27&v2=27"></script>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-46VWDGRLXJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-46VWDGRLXJ');
-</script>
-		<link href="/css/obfuscator.css?v=27&v2=3" rel="stylesheet" type="text/css">
-
-		 <!-- CodeMirror CSS -->
-		 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
-		 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">	 
-		 <style>
-			 .CodeMirror {
-				 height: 400px;
-				 border: 1px solid #ccc;
-			 }
-		 </style>
-
-		 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9142841210062390"crossorigin="anonymous"></script>
-	</head>
-	<body class="container">
-		<header id="navigationbar" class="border1-bottom">
-    <span class="menu-toggle "></span>
-    <a id="foologo" href="/home" title="WeAreDevs">WeAreDevs</a>
-    <ul class="navItems">
-        <li class='navItem'><a href="/exploits" title="Featured releases page">Exploits</a></li>
-        <li class='navItem navHeader_dropmenu'>
-            <a href="/scripts" title="Featured scripts page">Scripts</a>
-            <div class="menu round border1">
-                <a href='/scripts/upload'>Upload</a>
-                <a href="/forum/t/37448">API</a>
-            </div>
-        </li>
-        <li class='navItem navHeader_dropmenu'>
-			<a title="Speak with the community" href="/forum">Forum</a>
-            <div class="menu round border1">
-                <!--<a href='/profile/search'>Users</a>-->
-                <a href='/forum/all' title="Manage your account">All threads</a>
-            </div>
-        </li>
-        <li class='navItem'><a href="/obfuscator" title="Protect your LuaU scripts">Lua Obfuscator</a></li>
-        
-        <li class='navItem'><a title="Visual demonstration of our exploits" href="https://www.youtube.com/@WeAreDevsExploits" class="icon youtube"></a></li>
-        <li class='navItem'><a title="Alternative contact with the community" href="https://wearedevs.net/discord" class="icon discord"></a></li>
-        
-        <li class='navItem' style="margin-left: auto;"><a href="/login">Login</a></li>
-        
-    </ul>
-	
-	<script>
-        //Used to send logout request to API
-		function logout(){
-            if(!confirm("You are about to logout")) return
-
-            fetch('/api/account/logout', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-            })
-            .then(res => res.json())
-            .then(res => {
-                if(res.success) window.location.reload()
-                else {
-                    if(res.reason) alert("Error: " + res.reason)
-                    else alert("An unexpected error occured...")
-                }
-            })
-            .catch(()=>alert("Failed to contact the server or an unexpected response was received..."))
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bytez Hubs - Scripts & Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #0b0d14;
+            --sidebar-bg: rgba(15, 17, 26, 0.85);
+            --card-bg: rgba(22, 25, 38, 0.7);
+            --accent-primary: #00ff88;
+            --accent-secondary: #00aaff;
+            --text-main: #ffffff;
+            --text-muted: #a0a5b5;
+            --discord: #5865F2;
+            --youtube: #FF0000;
         }
 
-        async function DeleteNotifications(options){
-            //Prepare data
-            let documentID
-            let notificationElement
-            if(typeof options === "object") {
-                if(options.chatroom) {
-                    notificationElement = document.querySelector(`a[data-chatroom="${options.chatroom}"]`).parentElement.parentElement
-                    documentID = notificationElement.getAttribute('data-id')
-                }
-            }
-            else {
-                //Plainly received the notification document id
-                documentID = options
-                notificationElement = document.querySelector(`.notification[data-id="${documentID}"]`)
-            }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 255, 136, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 170, 255, 0.05), transparent 25%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            padding: 30px 20px;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.6);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: 1px;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .custom-icon {
+            height: 40px;
+            width: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 5px rgba(0, 170, 255, 0.5));
+        }
+
+        .btn-icon {
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            flex: 1;
+        }
+
+        .tab-button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 10px;
+            text-align: left;
+            gap: 15px;
+        }
+
+        .tab-button i {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            transform: translateX(5px);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 170, 255, 0.15));
+            color: var(--text-main);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .tab-button.active i {
+            color: var(--accent-primary);
+        }
+
+        .social-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .social-btn.discord:hover {
+            background: var(--discord);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3);
+        }
+
+        .social-btn.youtube:hover {
+            background: var(--youtube);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 0, 0, 0.3);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 50px;
+            max-width: 1200px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Menu Cards --- */
+        .menu-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .menu-card:hover::before {
+            opacity: 1;
+        }
+
+        .menu-card i {
+            font-size: 2.5rem;
+            color: var(--accent-secondary);
+            margin-bottom: 20px;
+        }
+
+        .menu-card h3 {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .menu-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Executor logo */
+        .executor-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 8px rgba(0, 170, 255, 0.4));
+            border-radius: 12px;
+        }
+
+        /* Platform Tabs */
+        .platform-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .platform-tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-muted);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .platform-tab-btn:hover {
+            background: rgba(0, 170, 255, 0.08);
+            color: var(--text-main);
+            border-color: rgba(0,170,255,0.3);
+        }
+
+        .platform-tab-btn.active {
+            background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,170,255,0.15));
+            color: var(--text-main);
+            border-color: rgba(0,255,136,0.35);
+            box-shadow: 0 0 16px rgba(0,255,136,0.1);
+        }
+
+        .platform-tab-btn i {
+            font-size: 1.1rem;
+        }
+
+        .platform-panel {
+            display: none;
+        }
+        .platform-panel.active {
+            display: block;
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        /* --- Scripts Grid --- */
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 20px 0 30px;
+        }
+
+        .script-button {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px 20px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .script-button:hover {
+            background: rgba(0, 170, 255, 0.1);
+            border-color: var(--accent-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 170, 255, 0.15);
+        }
+
+        .script-wrapper {
+            display: none;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .script-text {
+            background: #080a10;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 10px;
+            padding: 20px 60px 20px 20px;
+            font-family: "Fira Code", "Consolas", monospace;
+            font-size: 14px;
+            color: #00ff88;
+            word-break: break-all;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+            background: rgba(0, 255, 136, 0.12);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--accent-primary);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(0, 255, 136, 0.25);
+            border-color: var(--accent-primary);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: rgba(0, 255, 136, 0.3);
+            color: #fff;
+        }
+
+        /* --- Formulário --- */
+        textarea, input {
+            width: 100%;
+            background: #080a10;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 18px;
+            border-radius: 12px;
+            margin: 15px 0 25px;
+            font-family: "Fira Code", "Consolas", monospace;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
+            background: #0c0f17;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: #000;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            z-index: 1001;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 850px) {
+            .sidebar { left: -300px; width: 300px; }
+            .sidebar.active { left: 0; }
+            .main-content { margin-left: 0; padding: 80px 20px 30px; }
+            .menu-toggle { display: block; }
+            h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+
+    <div class="container">
+        <div class="sidebar glass" id="sidebar">
+            <div class="header">
+                <h1>Bytez Hubs</h1>
+            </div>
+
+            <div class="nav-links">
+                <button class="tab-button active" onclick="showTab('menu')">
+                    <i class="fas fa-home"></i> Início
+                </button>
+                <button class="tab-button" onclick="showTab('scripts')">
+                    <i class="fas fa-code"></i> Scripts
+                </button>
+                <button class="tab-button" onclick="showTab('executors')">
+                    <i class="fas fa-bolt"></i> Executores
+                </button>
+                <button class="tab-button" onclick="showTab('loadstringer')">
+                    <i class="fas fa-link"></i> Loadstringer
+                </button>
+            </div>
+
+            <div class="social-footer">
+                <a href="https://discord.gg/n46D8NTTFS" target="_blank" class="social-btn discord" title="Nosso Discord">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="https://www.youtube.com/@bytez_official" target="_blank" class="social-btn youtube" title="Nosso YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
             
-            //Requests API to delete notification from server database
-            await fetch('/api/notifications', {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id: documentID
-                })
-            })
-            .then(res => res.json())
+            <div id="menu" class="tab-content active">
+                <h2>Bem-vindo ao Bytez Hubs 👋</h2>
+                <p class="subtitle">Escolha uma das ferramentas abaixo para começar a explorar.</p>
 
-            // UI management
-            //Only deleted one notification
-            if(documentID) {
-                let notificationsContainer = document.querySelector('.notifications')
-                var numNotifs = notificationsContainer.childElementCount
-                document.querySelector(".notifcount").innerHTML = numNotifs - 1
-                if(numNotifs <= 1){
-                    notificationsContainer.innerHTML = "No notifications"
-                    document.querySelector(".notifcount").remove()
-                    document.querySelector(".deleteallnotifs").remove()
-                    document.querySelector(".menu-toggle-notif").classList.remove("menu-toggle-notif")
+                <div class="menu-overview">
+                    <div class="menu-card" onclick="showTab('scripts')">
+                        <i class="fas fa-file-code"></i>
+                        <h3>Scripts</h3>
+                        <p>Coleção atualizada de scripts para Roblox com dezenas de opções para diversos jogos.</p>
+                    </div>
+                    <div class="menu-card" onclick="showTab('executors')">
+                        <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" alt="Download Icon" class="custom-icon">
+                        <h3>Executores</h3>
+                        <p>Baixe os executores mais seguros e com maior compatibilidade de nível do mercado.</p>
+                    </div>
+                    <div class="menu-card" onclick="showTab('loadstringer')">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3>Loadstringer</h3>
+                        <p>Converta links Raw rapidamente em código Loadstring executável no Roblox.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="scripts" class="tab-content">
+                <h2>Coleção de Scripts 📜</h2>
+                <p class="subtitle">Clique no jogo para revelar o script loadstring correspondente.</p>
+
+                <div class="scripts-grid">
+                    <button class="script-button" onclick="toggleScript('kickLucky')">🍀 Kick a Lucky Block</button>
+                    <button class="script-button" onclick="toggleScript('universalBanana')">🐱 Banana Cat Hub</button>
+                    <button class="script-button" onclick="toggleScript('buildBoat')">🚤 Build a Boat</button>
+                    <button class="script-button" onclick="toggleScript('bloxFruits')">⚔️ Blox Fruits</button>
+                    <button class="script-button" onclick="toggleScript('fisch')">🎣 Fisch</button>
+                    <button class="script-button" onclick="toggleScript('kat')">🔪 KAT</button>
+                </div>
+
+                <div class="script-wrapper" id="kickLucky">
+                    <div class="script-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/KickaLuckyBlock"))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="universalBanana">
+                    <div class="script-text">loadstring(game:HttpGet("https://pastefy.app/GFsET9tC/raw"))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="buildBoat">
+                    <div class="script-text">loadstring(game:HttpGet("https://pastebin.com/raw/2rgfgZJP"))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="bloxFruits">
+                    <div class="script-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/DookDekDEE/Hyper/main/script.lua"))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="fisch">
+                    <div class="script-text">loadstring(game:HttpGet("https://soluna-script.vercel.app/fisch.lua",true))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="kat">
+                    <div class="script-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/luiz-felippe2359/dada/refs/heads/main/README.md"))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+            </div>
+
+            <div id="executors" class="tab-content">
+                <h2>Executores ⚡</h2>
+                <p class="subtitle">Faça o download das melhores ferramentas para injeção e execução.</p>
+
+                <!-- Platform selector tabs -->
+                <div class="platform-tabs">
+                    <button class="platform-tab-btn active" onclick="showPlatform('windows')">
+                        <i class="fab fa-windows"></i> Windows
+                    </button>
+                    <button class="platform-tab-btn" onclick="showPlatform('android')">
+                        <i class="fab fa-android"></i> Android
+                    </button>
+                    <button class="platform-tab-btn" onclick="showPlatform('ios')">
+                        <i class="fab fa-apple"></i> iOS
+                    </button>
+                </div>
+
+                <!-- Windows -->
+                <div id="platform-windows" class="platform-panel active">
+                    <div class="menu-overview">
+                        <div class="menu-card">
+                            <img src="https://xeno-onl.com/assets/xeno-logo.png" class="executor-logo" alt="Xeno Logo">
+                            <h3>Xeno Executor</h3>
+                            <p style="margin-bottom: 25px;">Confiável, atualizado regularmente e altamente seguro.</p>
+                            <a href="https://getxeno.site/" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Xeno
+                            </a>
+                        </div>
+
+                        <div class="menu-card">
+                            <img src="https://cdn.haxhell.com/executors/icon-velocity.webp" class="executor-logo" alt="Velocity Logo">
+                            <h3>VELOCITY</h3>
+                            <p style="margin-bottom: 25px;">O melhor executor sem key disponível na comunidade.</p>
+                            <a href="https://realvelocity.xyz/" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar VELOCITY
+                            </a>
+                        </div>
+
+                        <div class="menu-card">
+                            <img src="https://framerusercontent.com/images/lh1FeiWi7hdMeAKWA8hVal157SI.png?scale-down-to=512" class="executor-logo" alt="Swift Logo">
+                            <h3>Swift</h3>
+                            <p style="margin-bottom: 25px;">O melhor executor com key, recursos extras e poder.</p>
+                            <a href="https://getswift.vip/" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Swift
+                            </a>
+                        </div>
+
+                        <div class="menu-card">
+                            <img src="https://fluxus.team/wp-content/uploads/2025/07/Fluxus-Executor-Site-Logo.webp" class="executor-logo" alt="Fluxus Logo">
+                            <h3>Fluxus</h3>
+                            <p style="margin-bottom: 25px;">Executor estável e confiável, com ótima compatibilidade no Windows.</p>
+                            <a href="https://fluxus.team/download/" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Fluxus
+                            </a>
+                        </div>
+
+                        <div class="menu-card">
+                            <img src="https://api.rekonise.com/storage/serve/b64_Mzg2MTIzLzE3MjY3NTc0NzYzMDMtc29sYXJhbG9nby1yZW1vdmViZy1wcmV2aWV3LnBuZw" class="executor-logo" alt="Solara Logo">
+                            <h3>Solara</h3>
+                            <p style="margin-bottom: 25px;">Executor rápido e eficiente para Windows, com atualizações frequentes.</p>
+                            <a href="https://getsolara.dev/" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Solara
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Android -->
+                <div id="platform-android" class="platform-panel">
+                    <div class="menu-overview">
+                        <div class="menu-card">
+                            <img src="https://s3-eu-west-1.amazonaws.com/tpd/logos/654501e364519ebed7df39be/0x0.png" class="executor-logo" alt="Delta Logo">
+                            <h3>Delta Executor</h3>
+                            <p style="margin-bottom: 25px;">O executor mais popular e completo para Android no Roblox.</p>
+                            <a href="https://deltaexploits.gg/delta-executor-android" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Delta
+                            </a>
+                        </div>
+
+                        <div class="menu-card">
+                            <img src="https://fluxus.team/wp-content/uploads/2025/07/Fluxus-Executor-Site-Logo.webp" class="executor-logo" alt="Fluxus Logo">
+                            <h3>Fluxus</h3>
+                            <p style="margin-bottom: 25px;">Executor estável com ótima compatibilidade para Android.</p>
+                            <a href="https://fluxus.team/download/" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Fluxus
+                            </a>
+                        </div>
+
+                        <div class="menu-card">
+                            <img src="https://www.codex.lol/static/icons/icon.svg" class="executor-logo" alt="Codex Logo">
+                            <h3>Codex</h3>
+                            <p style="margin-bottom: 25px;">Executor moderno e prático direto no seu Android.</p>
+                            <a href="https://www.codex.lol/android" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Codex
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- iOS -->
+                <div id="platform-ios" class="platform-panel">
+                    <div class="menu-overview">
+                        <div class="menu-card">
+                            <img src="https://s3-eu-west-1.amazonaws.com/tpd/logos/654501e364519ebed7df39be/0x0.png" class="executor-logo" alt="Delta iOS Logo">
+                            <h3>Delta Executor</h3>
+                            <p style="margin-bottom: 25px;">O executor Delta disponível para dispositivos iOS.</p>
+                            <a href="https://deltaexploits.gg/delta-executor-ios" class="btn-action" target="_blank">
+                                <img src="https://cdn-icons-png.flaticon.com/512/72/72651.png" class="btn-icon" alt="Download"> Baixar Delta iOS
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loadstringer" class="tab-content">
+                <h2>Gerador de Loadstring 🔗</h2>
+                <p class="subtitle">Transforme links de código fonte (Raw) em loadstrings instantaneamente.</p>
+
+                <div class="glass" style="padding: 30px; border-radius: 16px; margin-bottom: 25px;">
+                    <label style="color: var(--accent-primary); font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 5px;">URL Raw:</label>
+                    <input type="text" id="inputUrl" placeholder="Ex: https://pastebin.com/raw/xxxxxx">
+                    <button class="btn-action" onclick="gerarLoadstring()"><i class="fas fa-bolt"></i> Gerar Código</button>
+                </div>
+
+                <div class="glass" style="padding: 30px; border-radius: 16px;">
+                    <label style="color: var(--accent-secondary); font-weight: 600; font-size: 1.1rem; display: block; margin-bottom: 5px;">Resultado:</label>
+                    <textarea id="resultadoUrl" rows="3" readonly placeholder="O script gerado aparecerá aqui..."></textarea>
+                    <button class="btn-action" style="background: rgba(255,255,255,0.1); color: white;" onclick="copiarLoadstring()"><i class="fas fa-copy"></i> Copiar Código</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            const targetTab = document.getElementById(tabId);
+            targetTab.style.display = 'block';
+            setTimeout(() => targetTab.classList.add('active'), 10);
+
+            const btns = document.querySelectorAll('.tab-button');
+            btns.forEach(btn => {
+                if(btn.getAttribute('onclick').includes(tabId)) {
+                    btn.classList.add('active');
                 }
-                notificationElement.remove()
-            }
-            //The server will default to delete everything because there is no specified id
-            else {
-                document.getElementsByClassName("notifications")[0].innerHTML = "<p>No notifications...</p>"
-                document.getElementsByClassName("notifcount")[0].style.display = "none"
-                document.getElementsByClassName("menu-toggle-notif")[0].classList.remove("menu-toggle-notif")
-                document.querySelector('.deleteallnotifs').style.display = 'none'
+            });
+            
+            if(window.innerWidth <= 850) {
+                document.getElementById('sidebar').classList.remove('active');
             }
         }
-        
-        // Listen to all clicks on the document
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('message-notif')){
-                var parent = event.target.parentElement.parentElement
-                var id = parent.getAttribute("data-id")
 
-                DeleteNotifications(id)
-            }
-            //Navigation options display toggle (Mobile view)
-            else if(event.target.classList.contains('menu-toggle')){
-                if(document.getElementsByClassName("navItems")[0].style.display !== "flex"){
-                    document.getElementsByClassName("navItems")[0].style.display = "flex"
-                    document.getElementsByClassName("menu-toggle-notif")[0].classList.remove("menu-toggle-notif")
-                }
-                else {
-                    document.getElementsByClassName("navItems")[0].style.display = "none"
-                    if(document.getElementsByClassName("notification").length > 0) 
-                        document.getElementsByClassName("menu-toggle")[0].classList.add("menu-toggle-notif")
-                }
-            }
-            //Drop-menu toggle
-            else if(event.target.classList.contains('dropmenu-title')){
-                if(event.target.parentElement.getElementsByClassName("menu")[0].style.display !== "block"){
-                    event.target.parentElement.getElementsByClassName("menu")[0].style.display = "block"
-                }
-                else event.target.parentElement.getElementsByClassName("menu")[0].style.display = "none"
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
 
-                event.target.parentElement.onmouseleave = () => event.target.parentElement.getElementsByClassName("menu")[0].style.display = "none"
-            } 
-        })
+        function toggleScript(scriptId) {
+            const allWrappers = document.querySelectorAll('.script-wrapper');
+            const target = document.getElementById(scriptId);
+            const isOpen = target.style.display === 'block';
+            allWrappers.forEach(w => w.style.display = 'none');
+            if (!isOpen) target.style.display = 'block';
+        }
+
+        function copyScript(btn) {
+            const text = btn.previousElementSibling.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = btn.querySelector('i');
+                btn.classList.add('copied');
+                icon.className = 'fas fa-check';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    icon.className = 'fas fa-copy';
+                }, 2000);
+            });
+        }
+
+        function showPlatform(platform) {
+            document.querySelectorAll('.platform-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.platform-tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('platform-' + platform).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function gerarLoadstring() {
+            const url = document.getElementById('inputUrl').value.trim();
+            if(!url) {
+                alert('Por favor, insira um link válido!');
+                return;
+            }
+            const scriptGerado = `loadstring(game:HttpGet("${url}"))()`;
+            document.getElementById('resultadoUrl').value = scriptGerado;
+        }
+
+        function copiarLoadstring() {
+            const txt = document.getElementById('resultadoUrl');
+            if(!txt.value) return;
+            txt.select();
+            document.execCommand('copy');
+            alert('Loadstring copiado para a área de transferência!');
+        }
     </script>
-</header>
-		<div class="wrapper">
-			<div class="ad">
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-9142841210062390"
-data-ad-slot="8260216639"
-data-ad-format="auto"
-data-full-width-responsive="true"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-			<main class="padding">
-				<section class="gapchildren">
-					<h1>LuaU Obfuscator</h1>
-					<p>Built to protect Roblox Lua scripts</p>
-					<textarea id="lua-editor"></textarea>
-					<textarea id="lua-output"></textarea>
-					<p class="status"></p>
-					<button class="btn-obfuscate border1 round padding button">Obfuscate</button>
-					<div class="verticalCenter btns-output">
-						<button class="btn-copy border1 round padding button" onclick="copyScript()">Copy</button>
-						<button class="btn-downloadscript border1 round padding button" onclick="downloadScript()">Download</button>
-						<button class="btn-newscript border1 round padding button" onclick="newScript()">New Script</button>
-					</div>
-				</section>
-				<section class="gapchildren">
-					<h2>What is an obfuscator?</h2>
-					<p>
-						This tool allows you to obfuscate your code, making it harder for others to read and reverse-engineer. 
-						By transforming your source code into a more complex and unreadable format, you can help protect your 
-						intellectual property while maintaining functionality. Perfect for developers looking to add an extra 
-						layer of security to their scripts.
-					</p>
-					<img src="/images/obfuscator/obfuscation-demo.webp"/>
-				</section>
-				<section class="gapchildren">
-					<h2>Why use an obfuscator?</h2>
-					<ul>
-						<li><strong>Code Security</strong> – Prevents reverse engineering and unauthorized modifications.</li>
-						<li><strong>Intellectual Property Protection</strong> – Safeguards proprietary algorithms and business logic.</li>
-						<li><strong>Anti-Tampering</strong> – Makes it harder for attackers to modify or exploit your software.</li>
-						<li><strong>Reduced Readability</strong> – Converts code into an obscure format while keeping it functional.</li>
-						<li><strong>License Enforcement</strong> – Helps deter unauthorized use of software by making it difficult to bypass restrictions.</li>
-					</ul>
-					<p>
-						If you're distributing your software and want to maintain control over its integrity, using an obfuscator is a smart choice.
-					</p>
-				</section>
-				<section class="gapchildren">
-					<h2>Is this safe to use?</h2>
-					<p>
-						Yes, this obfuscator is designed to transform your code without altering its functionality. It does not 
-						store, transmit, or share your code in any way. Everything happens securely 
-						on the server, ensuring your code remains private and protected.
-					</p>
-					<p>
-						However, obfuscation is not a foolproof security measure. While it makes code harder to read and modify, 
-						determined attackers may still attempt to deobfuscate it. For sensitive applications, consider combining 
-						obfuscation with other security practices such as encryption and proper access controls.
-					</p>
-					<div class="lessgapchildren">
-						<p>The obfuscation process is handled securely using Prometheus Lua Obfuscator, a widely trusted open-source obfuscation tool.</p>
-						<p>Prometheus is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0), ensuring transparency and security in its implementation. We have not modified its source code but use it as a backend tool for obfuscation.</p>
-						<p>For full transparency, you can access the Prometheus source code here: ➡ <a href="https://github.com/wcrddn/Prometheus" class="link">GitHub Repository</a></p>
-						<p>For more information about the AGPL-3.0 license, visit: ➡ <a href="https://github.com/prometheus-lua/Prometheus/blob/a4b00a2395e9982298fe76c7b055c755df25e6e9/LICENSE" class="link">GNU AGPL-3.0 License Details</a></p>
-					</div>
-				</section>
-				<section class="gapchildren">
-					<h2>Whats the cost?</h2>
-					<p>This is a completely free Lua obfuscator. No hidden fees, no premium features, no limitations. No catch at all! We're happy enough that you're here.</p>
-				</section>
-			</main>
-			<div class="ad">
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-9142841210062390"
-data-ad-slot="8260216639"
-data-ad-format="auto"
-data-full-width-responsive="true"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div>
-		</div>
-		<footer>
-	<ul class="footerlinks">
-		<li><a href="/terms-of-service" title="Terms of Service">Terms of Use</a></li>
-		<li><a href="/privacy" title="Privacy Policy">Privacy</a></li>
-		<li><a href="/guidelines">Guidelines</a></li>
-		<li class="footer-notifs"><span class="pointer" onclick="subNotifications()">Notifications</span></li>
-		<li><a href="/forum/Complaints">Help</a></li>
-		<li><a href="/home#submission">Exploit Submission</a></li>
-	</ul>
-	<br/>
-	<br/>
-	<p>© <script>document.write(new Date().getFullYear())</script> WeAreDevs</p>
-</footer>
-
-<!-- Push notifications setup -->
-<script>
-	var registration = null
-
-	const canPrompt = () => Notification.permission === "default" && (!localStorage.getItem("notifsLastPrompted") || (Date.now() - +localStorage.getItem("notifsLastPrompted")) / 864e5 > 7)
-
-	//Notifications are blocked
-	if (!canPrompt()) document.querySelector(".footer-notifs").remove()
-	
-	function urlBase64ToUint8Array(base64String) {
-		const padding = '='.repeat((4 - base64String.length % 4) % 4);
-		const base64 = (base64String + padding)
-			.replace(/\-/g, '+')
-			.replace(/_/g, '/')
-		;
-		const rawData = window.atob(base64);
-		return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
-	}
-	
-	function subNotifications() {
-		//Check if push manager is supported on this browser
-		if (!(registration && ('PushManager' in window))) return
-
-		if (!canPrompt()) return
-
-		//Only request once a week (Prevent browsers from blocking this site)
-		localStorage.setItem("notifsLastPrompted", Date.now().toString())
-
-		Notification.requestPermission()
-		.then(async function(permissionResult) {
-			if (permissionResult === 'granted') {
-				//Notifications are enabled
-				//Create subscription
-				const subscribeOptions = {
-					userVisibleOnly: true,
-					applicationServerKey: urlBase64ToUint8Array(
-						'BGyra8TIIln-swj30Hi4ZulNFcTe_EcmhqhIs0W1gMQv6ufiEorqnE-KvcgIO6kIfia6Jq0XYdHGv10jUdhiEko'
-					)
-				};
-
-				let pushSubscription = await registration.pushManager.subscribe(subscribeOptions)
-				if(!pushSubscription) throw new Error('Failed to subscribe')
-
-				fetch('/api/notifications/subscribe', {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify(pushSubscription)
-				})
-				.then(res => res.json())
-				.then(res => {
-					if(!res.success) {
-						if(res.reason) alert("Error: " + res.reason)
-						else alert("An unexpected error occured...")
-					}
-				})
-				.catch(()=>alert("Failed to contact the server or an unexpected response was received..."))
-			}
-			else {
-				throw new Error('We weren\'t granted permission.');
-			}
-		})
-	}
-	
-	//Register the service worker for notification display
-	if ('serviceWorker' in navigator) { 
-		//Service worker is supported on this browser
-		
-		//Register the service worker
-		navigator.serviceWorker.register('/js/service-worker.js?cb=2')
-		.then(function(_registration) {
-			console.log('Service worker successfully registered.');
-			
-			registration = _registration
-		})
-		.catch(function(err) {
-			console.warn('Unable to register service worker.', err);
-		});
-	}
-</script>
-
-		<!-- CodeMirror JS -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/lua/lua.min.js"></script>
-	
-		<script>
-			const editor = CodeMirror.fromTextArea(document.getElementById("lua-editor"), {
-				mode: "lua",
-				theme: "monokai",
-				lineNumbers: true,
-				indentUnit: 4,
-				tabSize: 4,
-				lineWrapping: true
-			});
-			editor.setSize(null, "275px");
-
-			const output = CodeMirror.fromTextArea(document.getElementById("lua-output"), {
-				mode: "lua",
-				theme: "monokai",
-				lineNumbers: true,
-				indentUnit: 4,
-				tabSize: 4,
-				lineWrapping: true
-			});
-			output.getWrapperElement().style.display = "none"
-
-			const textarea = document.querySelector("textarea")
-			const button = document.querySelector(".btn-obfuscate")
-
-			button.addEventListener("click", () => {
-				let text = editor.getValue()
-				if (text.length < 1) return showStatus("Please enter some text to obfuscate", {color: "var(--red)"})
-				button.style.display = "none"; // Show the obfuscate button again
-				showStatus("Obfuscating your script, please wait...")
-				fetch("/api/obfuscate", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ script: text })
-				})
-				.then(res => res.json())
-				.then(data => {
-					if (data.error) throw data.error
-					output.getWrapperElement().style.display = "block"
-					output.setValue(data.obfuscated)
-					showStatus("Obfuscation complete! You can now copy or download your script", {color: "var(--green)"})
-					button.style.display = "none"
-					document.querySelector(".btns-output").style.display = "flex"
-				})
-				.catch(e => {
-					showStatus(typeof e === "string" ? e : "An error occurred while obfuscating your script. Please try again later", {color: "var(--red)"})
-					button.style.display = "block"; // Show the obfuscate button again
-				})
-			})
-
-			function copyScript() {
-				const script = output.getValue();
-				navigator.clipboard.writeText(script).then(() => {
-					showStatus("Script copied to clipboard!", {autoclear: true}); // Show status message
-				})
-			}
-
-			function downloadScript(){
-				const script = output.getValue();
-				if (!script || script.length === 0) return alert("No script to download!")
-				const blob = new Blob([script], { type: "text/plain;charset=utf-8" });
-				const url = URL.createObjectURL(blob);
-				const a = document.createElement("a");
-				a.href = url;
-				a.download = `obfuscated_script-${Date.now()}.lua`; // Default filename
-				document.body.appendChild(a);
-				a.click();
-				document.body.removeChild(a);
-				URL.revokeObjectURL(url); // Clean up the URL object
-			}
-
-			function newScript() {
-				editor.setValue(""); // Clear the editor
-				output.setValue(""); // Clear the output
-				document.querySelector(".btns-output").style.display = "none"; // Hide output buttons
-				button.style.display = "block"; // Show the obfuscate button again
-				output.getWrapperElement().style.display = "none"
-			}
-
-			let statusTimeout
-			function showStatus(message, options) {
-				if(statusTimeout) clearTimeout(statusTimeout)
-				const statusElement = document.querySelector(".status")
-				statusElement.textContent = message
-				statusElement.style.opacity = 1
-
-				if(options?.autoclear) statusTimeout = setTimeout(() => {
-					statusElement.textContent = ""
-					statusElement.style.opacity = 0
-				}, 5000); // Hide after 5 seconds
-
-				statusElement.style.color = options?.color ? options.color : "inherit"
-			}
-		</script>
-	<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"590f2401a8d44208afbb49b0ad651d4a","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
