@@ -381,6 +381,8 @@
             word-break: break-all;
             box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
             line-height: 1.6;
+            white-space: pre-wrap;
+            margin: 0;
         }
 
         .copy-btn {
@@ -586,7 +588,7 @@
                     <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
                 </div>
                 <div class="script-wrapper" id="ttn">
-                    <div class="script-text">Config = {
+                    <pre class="script-text">Config = {
     Team = "Pirates",
     Configuration = {
         HopWhenIdle = true,
@@ -610,7 +612,7 @@
         StayInSea2UntilHaveDarkFragments = false
     }
 }
-loadstring(game:HttpGet("https://raw.githubusercontent.com/hhl29042008-ops/script/refs/heads/main/cac"))()</div>
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hhl29042008-ops/script/refs/heads/main/cac"))()</pre>
                     <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
                 </div>
             </div>
