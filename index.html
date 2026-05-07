@@ -554,6 +554,8 @@
                     <button class="script-button" onclick="toggleScript('universalBanana')">🐱 Banana Cat Hub</button>
                     <button class="script-button" onclick="toggleScript('buildBoat')">🚤 Build a Boat</button>
                     <button class="script-button" onclick="toggleScript('bloxFruits')">⚔️ Blox Fruits</button>
+                    <button class="script-button" onclick="toggleScript('gravityHub')">🌌 Blox Fruits - GravityHub</button>
+                    <button class="script-button" onclick="toggleScript('astralHub')">✨ Blox Fruits - Astral Hub</button>
                     <button class="script-button" onclick="toggleScript('fisch')">🎣 Fisch</button>
                     <button class="script-button" onclick="toggleScript('kat')">🔪 KAT</button>
                     <button class="script-button" onclick="toggleScript('ttn')">🏴‍☠️ 3TN (Blox Fruits)</button>
@@ -576,7 +578,17 @@
                     <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
                 </div>
                 <div class="script-wrapper" id="bloxFruits">
-                    <div class="script-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/DookDekDEE/Hyper/main/script.lua"))()</div>
+                    <pre class="script-text">--[[ Credit: Hermanos-Dev, Dont Delete This. ]]--
+getgenv().script_mode = "PVP" -- PVP, FARM
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hermanos-dev/hermanos-hub/refs/heads/main/Loader.lua"))()</pre>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="gravityHub">
+                    <div class="script-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua"))()</div>
+                    <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
+                </div>
+                <div class="script-wrapper" id="astralHub">
+                    <div class="script-text">loadstring(game:HttpGet("https://raw.githubusercontent.com/Overgustx2/Main/refs/heads/main/BloxFruits_25.html"))()</div>
                     <button class="copy-btn" onclick="copyScript(this)" title="Copiar"><i class="fas fa-copy"></i></button>
                 </div>
                 <div class="script-wrapper" id="fisch">
